@@ -1,0 +1,26 @@
+name: Compilar Cheat Engine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Lazarus en la nube
+        run: choco install lazarus -y --no-progress
+
+      - name: Compilar Cheat Engine 64-bit
+        run: |
+          & "C:\lazarus\lazbuild.exe" --build-mode="Release 64-Bit" "Cheat Engine\cheatengine.lpi"
+
+      - name: Guardar ejecutable compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: CheatEngine-Limpio
+          path: |
+            Cheat Engine/bin/*.exe
+            Cheat Engine/bin/*.dll
